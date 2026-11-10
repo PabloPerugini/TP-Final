@@ -129,7 +129,7 @@ El ABB no se balancea. Es correcto para la consigna y permite responder la pregu
 
 ### Taller
 
-Cada bicicleta existente puede ingresarse al taller con prioridad 1 a 3. Las eléctricas se fuerzan siempre a prioridad 1. Si la bicicleta no figura como averiada se muestra un aviso, pero se permite el ingreso como mantenimiento preventivo; la consigna describe a las averiadas y no prohíbe el caso.
+Cada bicicleta existente puede ingresarse al taller con prioridad 1 a 3. Las eléctricas se fuerzan siempre a prioridad 1. Si la bicicleta no figura como averiada se muestra un aviso, pero se permite el ingreso como mantenimiento preventivo; la consigna describe a las averiadas y no prohíbe el caso. Si la bicicleta ya está en el taller, el ingreso se rechaza.
 
 ## Respuestas a las consignas de análisis
 
