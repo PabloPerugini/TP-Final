@@ -13,6 +13,7 @@ public:
 
     void insertar(int biciId, int prioridad);
     bool extraerMin(EntradaTaller& salida);
+    bool contiene(int biciId) const;
     bool estaVacio() const;
     int tamanio() const;
     void vaciar();

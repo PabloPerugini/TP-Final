@@ -79,6 +79,15 @@ bool MinHeap::extraerMin(EntradaTaller& salida) {
     return true;
 }
 
+bool MinHeap::contiene(int biciId) const {
+    for (int i = 0; i < cantidad; ++i) {
+        if (datos[i].biciId == biciId) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool MinHeap::estaVacio() const {
     return cantidad == 0;
 }

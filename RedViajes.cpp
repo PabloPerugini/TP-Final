@@ -73,6 +73,11 @@ bool Red::ingresarBiciTaller(int biciId, int prioridad) {
         return false;
     }
 
+    if (taller->contiene(biciId)) {
+        std::cout << "La bicicleta " << biciId << " ya esta en el taller.\n";
+        return false;
+    }
+
     int prioridadFinal = prioridad;
     if (bicicleta->getTipo() == TipoBici::Electrica) {
         prioridadFinal = 1;
