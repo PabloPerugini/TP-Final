@@ -4,6 +4,7 @@
 #include "TablaHash.h"
 #include "ListaViajes.h"
 #include "MinHeap.h"
+#include "AbbBicicletas.h"
 
 void probarColaEspera() {
     ColaEspera cola;
@@ -202,4 +203,99 @@ void probarMinHeap() {
     heap.insertar(1, 2);
     heap.vaciar();
     CHECK(heap.estaVacio() && heap.tamanio() == 0, "vaciar deja el heap vacio");
+}
+
+void probarAbb() {
+    AbbBicicletas abb;
+
+    CHECK(abb.altura() == 0, "un ABB vacio tiene altura 0");
+    CHECK(abb.contarAveriadas() == 0, "un ABB vacio no tiene averiadas");
+    CHECK(abb.buscar(501) == nullptr, "buscar en un ABB vacio devuelve nullptr");
+
+    CHECK(abb.insertar(new Bicicleta(501, "PLZ", TipoBici::Mecanica,
+                                     EstadoBici::OK, 1000)),
+          "insertar 501");
+    CHECK(abb.insertar(new Bicicleta(502, "PAL", TipoBici::Electrica,
+                                     EstadoBici::Averiada, 3500)),
+          "insertar 502");
+    CHECK(abb.insertar(new Bicicleta(503, "CAB", TipoBici::Mecanica,
+                                     EstadoBici::OK, 200)),
+          "insertar 503");
+    CHECK(abb.insertar(new Bicicleta(504, "RET", TipoBici::Electrica,
+                                     EstadoBici::Averiada, 4200)),
+          "insertar 504");
+    CHECK(abb.insertar(new Bicicleta(505, "CON", TipoBici::Mecanica,
+                                     EstadoBici::OK, 500)),
+          "insertar 505");
+
+    Bicicleta* duplicada = new Bicicleta(503, "XXX", TipoBici::Mecanica,
+                                         EstadoBici::OK, 0);
+    CHECK(!abb.insertar(duplicada), "no se debe insertar un ID duplicado");
+    delete duplicada;
+
+    CHECK(abb.buscar(503) != nullptr &&
+              abb.buscar(503)->getCodigoEstacion() == "CAB",
+          "buscar 503 devuelve la bicicleta correcta");
+    CHECK(abb.buscar(999) == nullptr, "buscar un ID inexistente devuelve nullptr");
+    CHECK(abb.contarAveriadas() == 2, "deben contarse 2 bicicletas averiadas");
+    CHECK(abb.altura() == 5,
+          "la carga ascendente 501..505 debe formar una cadena de altura 5");
+
+    std::string inorder = capturarSalida([&abb]() { abb.listarInorder(); });
+    std::size_t pos501 = inorder.find("Bici #501");
+    std::size_t pos503 = inorder.find("Bici #503");
+    std::size_t pos505 = inorder.find("Bici #505");
+    CHECK(pos501 != std::string::npos && pos503 != std::string::npos &&
+              pos505 != std::string::npos && pos501 < pos503 && pos503 < pos505,
+          "el recorrido inorder debe salir en orden creciente");
+
+    std::string mayores =
+        capturarSalida([&abb]() { abb.listarConKilometrosMayoresA(3000); });
+    CHECK(mayores.find("Bici #502") != std::string::npos,
+          "el filtro debe incluir la 502");
+    CHECK(mayores.find("Bici #504") != std::string::npos,
+          "el filtro debe incluir la 504");
+    CHECK(mayores.find("Bici #501") == std::string::npos,
+          "el filtro no debe incluir la 501");
+
+    abb.vaciar();
+    CHECK(abb.altura() == 0, "vaciar deja el ABB con altura 0");
+    CHECK(abb.buscar(501) == nullptr, "vaciar elimina todas las bicicletas");
+
+    const int ids[] = {501, 401, 601, 301, 451, 551, 701};
+    for (int id : ids) {
+        CHECK(abb.insertar(new Bicicleta(id, "PLZ", TipoBici::Mecanica,
+                                         EstadoBici::OK, 0)),
+              "insertar bicicleta del arbol de borrado");
+    }
+    CHECK(abb.altura() == 3, "el arbol de borrado tiene altura 3");
+
+    // 501 tiene dos hijos; el sucesor 551 ocupa su lugar.
+    CHECK(abb.eliminar(501), "eliminar la raiz con dos hijos");
+    CHECK(abb.buscar(501) == nullptr && abb.buscar(551) != nullptr,
+          "el sucesor debe quedar en el arbol");
+    CHECK(abb.altura() == 3, "la altura se mantiene tras el primer borrado");
+
+    // 401 tiene dos hijos.
+    CHECK(abb.eliminar(401), "eliminar un nodo interno con dos hijos");
+    CHECK(abb.buscar(401) == nullptr && abb.buscar(451) != nullptr,
+          "el sucesor 451 debe quedar en el arbol");
+
+    // 601 tiene un solo hijo (701).
+    CHECK(abb.eliminar(601), "eliminar un nodo con un hijo");
+    CHECK(abb.buscar(601) == nullptr && abb.buscar(701) != nullptr,
+          "el hijo 701 debe quedar en el arbol");
+
+    // 701 es una hoja.
+    CHECK(abb.eliminar(701), "eliminar una hoja");
+    CHECK(abb.buscar(701) == nullptr, "la hoja eliminada ya no existe");
+    CHECK(!abb.eliminar(701), "eliminar dos veces devuelve false");
+    CHECK(abb.buscar(301) != nullptr && abb.buscar(451) != nullptr &&
+              abb.buscar(551) != nullptr,
+          "las bicicletas restantes siguen en el arbol");
+    CHECK(abb.altura() == 3, "el arbol restante conserva altura 3");
+
+    abb.vaciar();
+    CHECK(abb.altura() == 0 && abb.buscar(551) == nullptr,
+          "vaciar deja el arbol vacio despues de los borrados");
 }
