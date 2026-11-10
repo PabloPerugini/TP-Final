@@ -68,7 +68,15 @@ int Red::calcularRedistribucionManual(int capacidadCamion) const {
 
     int cantidad = 0;
     std::cout << "Cantidad de estaciones: ";
-    if (!(std::cin >> cantidad) || cantidad <= 0) {
+    if (!(std::cin >> cantidad)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Entrada invalida: la cantidad debe ser un numero "
+                     "entero.\n";
+        return 0;
+    }
+    if (cantidad <= 0) {
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "La cantidad debe ser mayor que cero.\n";
         return 0;
     }
@@ -77,7 +85,16 @@ int Red::calcularRedistribucionManual(int capacidadCamion) const {
     int* faltantes = new int[cantidad];
     for (int i = 0; i < cantidad; ++i) {
         std::cout << "Estacion " << (i + 1) << " (codigo faltante): ";
-        std::cin >> codigos[i] >> faltantes[i];
+        if (!(std::cin >> codigos[i] >> faltantes[i])) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
+                            '\n');
+            std::cout << "Entrada invalida: se esperaba un codigo y un "
+                         "numero entero de faltantes.\n";
+            delete[] codigos;
+            delete[] faltantes;
+            return 0;
+        }
     }
 
     int soluciones = resolverYMostrar(codigos, faltantes, cantidad,
