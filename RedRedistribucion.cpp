@@ -6,6 +6,11 @@
 #include <limits>
 
 namespace {
+void descartarRestoDeLinea() {
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 int resolverYMostrar(const std::string* codigos, const int* faltantes,
                      int cantidad, int capacidad) {
     std::cout << "Capacidad del camion: " << capacidad << "\n";
@@ -69,8 +74,7 @@ int Red::calcularRedistribucionManual(int capacidadCamion) const {
     int cantidad = 0;
     std::cout << "Cantidad de estaciones: ";
     if (!(std::cin >> cantidad)) {
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        descartarRestoDeLinea();
         std::cout << "Entrada invalida: la cantidad debe ser un numero "
                      "entero.\n";
         return 0;
@@ -86,9 +90,7 @@ int Red::calcularRedistribucionManual(int capacidadCamion) const {
     for (int i = 0; i < cantidad; ++i) {
         std::cout << "Estacion " << (i + 1) << " (codigo faltante): ";
         if (!(std::cin >> codigos[i] >> faltantes[i])) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(),
-                            '\n');
+            descartarRestoDeLinea();
             std::cout << "Entrada invalida: se esperaba un codigo y un "
                          "numero entero de faltantes.\n";
             delete[] codigos;
