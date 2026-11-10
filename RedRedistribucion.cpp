@@ -3,6 +3,7 @@
 #include "Estacion.h"
 #include "Backtracking.h"
 #include <iostream>
+#include <limits>
 
 namespace {
 int resolverYMostrar(const std::string* codigos, const int* faltantes,
@@ -83,5 +84,6 @@ int Red::calcularRedistribucionManual(int capacidadCamion) const {
                                       capacidadCamion);
     delete[] codigos;
     delete[] faltantes;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return soluciones;
 }

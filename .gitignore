@@ -2,6 +2,7 @@
 *.o
 *.obj
 *.stackdump
+salidaPrueba.txt
 build/
 .vscode/
 .idea/
