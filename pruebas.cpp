@@ -6,6 +6,7 @@ int main() {
     probarColaEspera();
     probarEstacion();
     probarTablaHash();
+    probarListaViajes();
 
     if (fallos == 0) {
         std::cout << "OK: todas las pruebas pasaron.\n";

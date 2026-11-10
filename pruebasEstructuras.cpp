@@ -2,6 +2,7 @@
 #include "ColaEspera.h"
 #include "Estacion.h"
 #include "TablaHash.h"
+#include "ListaViajes.h"
 
 void probarColaEspera() {
     ColaEspera cola;
@@ -130,4 +131,28 @@ void probarTablaHash() {
           "insertar despues de vaciar");
     CHECK(tabla.getCantidad() == 1 && tabla.getColisiones() == 0,
           "la tabla queda utilizable despues de vaciar");
+}
+
+void probarListaViajes() {
+    ListaViajes lista;
+
+    CHECK(lista.getCantidad() == 0, "la lista nueva debe estar vacia");
+
+    lista.insertar(new Viaje(1, 501, "301", "PLZ", "PAL", 20260310, 25));
+    lista.insertar(new Viaje(2, 502, "302", "PLZ", "CAB", 20260312, 35));
+    lista.insertar(new Viaje(3, 503, "301", "PAL", "RET", 20260311, 40));
+    lista.insertar(new Viaje(4, 504, "301", "PLZ", "BOE", 20260312, 15));
+
+    CHECK(lista.getCantidad() == 4, "la lista debe tener 4 viajes");
+    CHECK(lista.contarPorRangoFechas("PLZ", 20260310, 20260312) == 3,
+          "deben contarse 3 viajes desde PLZ en el rango");
+    CHECK(lista.contarPorRangoFechas("PLZ", 20260311, 20260311) == 0,
+          "el rango de un dia sin viajes debe dar 0");
+    CHECK(lista.contarPorRangoFechas("XXX", 20260101, 20261231) == 0,
+          "una estacion inexistente no tiene viajes");
+    CHECK(lista.buscarPorDni("301") == 80, "el DNI 301 debe sumar 80 minutos");
+    CHECK(lista.buscarPorDni("999") == 0, "un DNI inexistente suma 0");
+
+    lista.vaciar();
+    CHECK(lista.getCantidad() == 0, "vaciar deja la lista sin viajes");
 }

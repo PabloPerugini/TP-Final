@@ -28,5 +28,6 @@ std::string capturarSalida(Funcion funcion) {
 void probarColaEspera();
 void probarEstacion();
 void probarTablaHash();
+void probarListaViajes();
 
 #endif
