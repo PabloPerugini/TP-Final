@@ -1,6 +1,10 @@
 #ifndef ESTACION_H
 #define ESTACION_H
+
 #include <string>
+#include "ColaEspera.h"
+
+enum class ResultadoDevolucion { AsignadaAEspera, AgregadaAEstacion, SinLugar };
 
 class Estacion {
 public:
@@ -17,13 +21,18 @@ public:
 
     double porcentajeOcupacion() const;
 
+    bool retirarBicicleta();
+    ResultadoDevolucion devolverBicicleta(std::string& dniAsignado);
+    void encolarUsuario(const std::string& dni);
+    int getUsuariosEnEspera() const;
+
 private:
     std::string codigo;
     std::string nombre;
     std::string barrio;
     int capacidadAnclajes;
     int biciDisponibles;
-
+    ColaEspera colaEspera;
 };
 
 #endif

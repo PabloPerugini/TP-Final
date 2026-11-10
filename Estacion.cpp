@@ -10,10 +10,8 @@ Estacion::Estacion(const std::string& codigo, const std::string& nombre,
       capacidadAnclajes(capacidadAnclajes),
       biciDisponibles(biciDisponibles) {}
 
-// Destructor
+// Destructor: la cola de espera libera sus nodos en su propio destructor.
 Estacion::~Estacion() {
-    // Si no hay asignación dinámica de memoria dentro de la clase,
-    // el destructor por defecto se encarga del limpiado de std::string.
 }
 
 // Getters
@@ -43,4 +41,33 @@ double Estacion::porcentajeOcupacion() const {
         return 0.0;
     }
     return (static_cast<double>(biciDisponibles) / capacidadAnclajes) * 100.0;
+}
+
+bool Estacion::retirarBicicleta() {
+    if (biciDisponibles <= 0) {
+        return false;
+    }
+    --biciDisponibles;
+    return true;
+}
+
+ResultadoDevolucion Estacion::devolverBicicleta(std::string& dniAsignado) {
+    if (colaEspera.desencolar(dniAsignado)) {
+        return ResultadoDevolucion::AsignadaAEspera;
+    }
+
+    if (biciDisponibles < capacidadAnclajes) {
+        ++biciDisponibles;
+        return ResultadoDevolucion::AgregadaAEstacion;
+    }
+
+    return ResultadoDevolucion::SinLugar;
+}
+
+void Estacion::encolarUsuario(const std::string& dni) {
+    colaEspera.encolar(dni);
+}
+
+int Estacion::getUsuariosEnEspera() const {
+    return colaEspera.tamanio();
 }
