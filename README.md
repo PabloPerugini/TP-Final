@@ -24,18 +24,15 @@ compilar.bat
 tp.exe
 ```
 
-Para compilar y ejecutar las pruebas automatizadas:
-
-```bat
-probar.bat
-```
-
 ### Linux o macOS
 
 ```bash
-make          # genera ./tp
+g++ -std=c++17 -Wall -Wextra -o tp \
+    Bicicleta.cpp ColaEspera.cpp Estacion.cpp Viaje.cpp TablaHash.cpp \
+    ListaViajes.cpp MinHeap.cpp AbbBicicletas.cpp GrafoCiclovias.cpp \
+    Backtracking.cpp Red.cpp RedEstaciones.cpp RedViajes.cpp \
+    RedBicicletas.cpp RedRedistribucion.cpp interfaz.cpp main.cpp
 ./tp
-make test     # compila y ejecuta las pruebas
 ```
 
 El programa lee los archivos con rutas relativas, así que debe ejecutarse desde la carpeta que contiene `estaciones.txt`, `bicicletas.txt`, `viajes.txt` y `ciclovias.txt`.
@@ -191,18 +188,10 @@ Ejemplo del PDF con `C = 10` y faltantes `PLZ 3`, `CAB 7`, `RET 5`, `CON 2`, `BO
 
 Son exactamente **4 soluciones**.
 
-## Pruebas y verificación
+## Verificación
 
-- `probar.bat` compila y ejecuta las pruebas de cola, estación, hash, lista de viajes, min-heap, ABB, grafo, backtracking y `Red`.
-- Las pruebas de `Red` cargan los archivos reales y verifican: 10 estaciones, 12 bicicletas, 20 viajes, 3 colisiones, factor 0.7692, consultas de viajes, cola de espera, taller, ABB, BFS y las 4 soluciones del backtracking.
-- `compilar.bat` compila `tp.exe` con `-Wall -Wextra`, sin warnings.
-- La prueba de integración del menú usa `entradaPrueba.txt`:
-
-```powershell
-Get-Content entradaPrueba.txt | .\tp.exe
-```
-
-- `cppcheck` se ejecutó con `--enable=warning,performance,portability --inconclusive --std=c++17` sin hallazgos.
+- `compilar.bat` compila `tp.exe` con `g++ -std=c++17 -Wall -Wextra`, sin warnings.
+- El código se revisó con `cppcheck --enable=warning,performance,portability --inconclusive --std=c++17 *.cpp` sin hallazgos.
 - En Linux se recomienda verificar con Valgrind:
 
 ```bash
@@ -228,9 +217,9 @@ El diagrama de clases está en [`docs/diagrama-clases.md`](docs/diagrama-clases.
 ├── ListaViajes.* / Viaje.*      # viajes
 ├── GrafoCiclovias.*             # grafo y BFS
 ├── Backtracking.*               # redistribución
-├── pruebas*.cpp / pruebas*.h    # pruebas automatizadas
-├── compilar.bat / probar.bat / Makefile
-├── entradaPrueba.txt            # recorrido automático del menú
+├── compilar.bat                 # compilación en Windows
 ├── estaciones.txt, bicicletas.txt, viajes.txt, ciclovias.txt
+├── README.md
+├── TP2C2026.pdf                 # enunciado del trabajo práctico
 └── docs/diagrama-clases.md
 ```
