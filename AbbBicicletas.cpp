@@ -81,6 +81,18 @@ int AbbBicicletas::altura() const {
     return alturaRec(raiz);
 }
 
+int AbbBicicletas::getCantidad() const {
+    return contarNodosRec(raiz);
+}
+
+int AbbBicicletas::contarNodosRec(NodoAbb* nodo) const {
+    if (nodo == nullptr) {
+        return 0;
+    }
+    return 1 + contarNodosRec(nodo->izquierdo) +
+           contarNodosRec(nodo->derecho);
+}
+
 int AbbBicicletas::alturaRec(NodoAbb* nodo) const {
     if (nodo == nullptr) {
         return 0;

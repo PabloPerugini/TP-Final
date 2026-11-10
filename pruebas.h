@@ -33,5 +33,10 @@ void probarMinHeap();
 void probarAbb();
 void probarGrafo();
 void probarBacktracking();
+void probarRedCarga();
+void probarRedEstaciones();
+void probarRedViajes();
+void probarRedBicicletas();
+void probarRedRedistribucion();
 
 #endif

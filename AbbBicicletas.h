@@ -12,6 +12,7 @@ public:
     Bicicleta* buscar(int id) const;
     void listarInorder() const;
     int contarAveriadas() const;
+    int getCantidad() const;
     int altura() const;
     bool eliminar(int id);
     void listarConKilometrosMayoresA(int limite) const;
@@ -35,6 +36,7 @@ private:
     void listarInorderRec(NodoAbb* nodo) const;
     void listarMayoresRec(NodoAbb* nodo, int limite) const;
     int contarAveriadasRec(NodoAbb* nodo) const;
+    int contarNodosRec(NodoAbb* nodo) const;
     int alturaRec(NodoAbb* nodo) const;
     void liberarPostorder(NodoAbb* nodo);
 

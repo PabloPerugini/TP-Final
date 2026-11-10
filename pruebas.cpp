@@ -11,6 +11,11 @@ int main() {
     probarAbb();
     probarGrafo();
     probarBacktracking();
+    probarRedCarga();
+    probarRedEstaciones();
+    probarRedViajes();
+    probarRedBicicletas();
+    probarRedRedistribucion();
 
     if (fallos == 0) {
         std::cout << "OK: todas las pruebas pasaron.\n";
