@@ -29,5 +29,6 @@ void probarColaEspera();
 void probarEstacion();
 void probarTablaHash();
 void probarListaViajes();
+void probarMinHeap();
 
 #endif

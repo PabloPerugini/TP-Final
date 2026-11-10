@@ -3,6 +3,7 @@
 #include "Estacion.h"
 #include "TablaHash.h"
 #include "ListaViajes.h"
+#include "MinHeap.h"
 
 void probarColaEspera() {
     ColaEspera cola;
@@ -155,4 +156,50 @@ void probarListaViajes() {
 
     lista.vaciar();
     CHECK(lista.getCantidad() == 0, "vaciar deja la lista sin viajes");
+}
+
+void probarMinHeap() {
+    MinHeap heap;
+    EntradaTaller salida;
+
+    CHECK(heap.estaVacio(), "el heap nuevo debe estar vacio");
+    CHECK(heap.tamanio() == 0, "el heap nuevo debe tener tamanio 0");
+    CHECK(!heap.extraerMin(salida), "extraer de un heap vacio debe devolver false");
+
+    heap.insertar(10, 3);
+    heap.insertar(20, 1);
+    heap.insertar(30, 2);
+    heap.insertar(40, 1);
+    CHECK(heap.tamanio() == 4, "el heap debe tener 4 elementos");
+
+    CHECK(heap.extraerMin(salida) && salida.prioridad == 1,
+          "primero debe salir una prioridad 1");
+    int primero = salida.biciId;
+    CHECK(heap.extraerMin(salida) && salida.prioridad == 1,
+          "segundo debe salir una prioridad 1");
+    int segundo = salida.biciId;
+    CHECK((primero == 20 && segundo == 40) || (primero == 40 && segundo == 20),
+          "deben salir las dos prioridades 1");
+    CHECK(heap.extraerMin(salida) && salida.biciId == 30 && salida.prioridad == 2,
+          "luego debe salir la prioridad 2");
+    CHECK(heap.extraerMin(salida) && salida.biciId == 10 && salida.prioridad == 3,
+          "al final debe salir la prioridad 3");
+    CHECK(!heap.extraerMin(salida), "el heap debe quedar vacio");
+
+    for (int i = 0; i < 20; ++i) {
+        heap.insertar(i, (i % 3) + 1);
+    }
+    CHECK(heap.tamanio() == 20, "el heap debe crecer a 20 elementos");
+    int prioridadAnterior = 0;
+    for (int i = 0; i < 20; ++i) {
+        CHECK(heap.extraerMin(salida), "debe extraerse cada elemento");
+        CHECK(salida.prioridad >= prioridadAnterior,
+              "las prioridades deben salir en orden no decreciente");
+        prioridadAnterior = salida.prioridad;
+    }
+    CHECK(heap.estaVacio(), "el heap debe quedar vacio despues de extraer todo");
+
+    heap.insertar(1, 2);
+    heap.vaciar();
+    CHECK(heap.estaVacio() && heap.tamanio() == 0, "vaciar deja el heap vacio");
 }

@@ -7,6 +7,7 @@ int main() {
     probarEstacion();
     probarTablaHash();
     probarListaViajes();
+    probarMinHeap();
 
     if (fallos == 0) {
         std::cout << "OK: todas las pruebas pasaron.\n";
