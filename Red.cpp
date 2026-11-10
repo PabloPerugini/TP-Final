@@ -166,14 +166,17 @@ double Red::getFactorCargaHash() const {
 
 void Red::mostrarEstadisticasHash() const {
     std::cout << "=== ESTADISTICAS DE LA TABLA HASH ===\n";
-    std::cout << "Estaciones cargadas: " << estaciones->getCantidad() << "\n";
+    std::cout << "Estaciones cargadas: " << getCantidadEstaciones() << "\n";
+    std::cout << "Bicicletas registradas: " << getCantidadBicicletas() << "\n";
+    std::cout << "Viajes registrados: " << getCantidadViajes() << "\n";
     std::cout << "Capacidad de la tabla: " << estaciones->getCapacidad() << "\n";
-    std::cout << "Colisiones registradas: " << estaciones->getColisiones()
-              << "\n";
+    std::cout << "Colisiones registradas: " << getColisionesHash() << "\n";
     std::cout << std::fixed << std::setprecision(4);
-    std::cout << "Factor de carga final: " << estaciones->factorDeCarga()
-              << " (" << estaciones->getCantidad() << "/"
-              << estaciones->getCapacidad() << ")\n";
+    std::cout << "Factor de carga final: " << getFactorCargaHash() << " ("
+              << getCantidadEstaciones() << "/" << estaciones->getCapacidad()
+              << ")\n";
     std::cout.unsetf(std::ios::floatfield);
     std::cout << std::setprecision(6);
+    std::cout << "Contenido de la tabla (por bucket):\n";
+    estaciones->listarTodas();
 }
