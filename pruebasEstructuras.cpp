@@ -1,6 +1,7 @@
 #include "pruebas.h"
 #include "ColaEspera.h"
 #include "Estacion.h"
+#include "TablaHash.h"
 
 void probarColaEspera() {
     ColaEspera cola;
@@ -58,4 +59,75 @@ void probarEstacion() {
 
     Estacion otra("X", "X", "X", 4, 2);
     CHECK(otra.porcentajeOcupacion() == 50.0, "porcentaje de ocupacion 50%");
+}
+
+void probarTablaHash() {
+    TablaHash tabla;
+    struct DatoEstacion {
+        const char* codigo;
+        const char* nombre;
+        const char* barrio;
+        int capacidad;
+        int disponibles;
+    };
+
+    const DatoEstacion datos[10] = {
+        {"PLZ", "PlazaDeMayo", "Monserrat", 30, 12},
+        {"PAL", "ParqueTresDeFebrero", "Palermo", 40, 35},
+        {"CAB", "PrimeraJunta", "Caballito", 25, 4},
+        {"RET", "Retiro", "Retiro", 50, 45},
+        {"CON", "Congreso", "Congreso", 20, 3},
+        {"BOE", "Boca", "Boca", 15, 2},
+        {"BAL", "Balvanera", "Balvanera", 35, 10},
+        {"FLO", "Flores", "Flores", 28, 22},
+        {"BEL", "Belgrano", "Belgrano", 45, 44},
+        {"ISL", "IslaDatos", "PuertoMadero", 18, 0}
+    };
+
+    for (int i = 0; i < 10; ++i) {
+        CHECK(tabla.insertar(datos[i].codigo,
+                             new Estacion(datos[i].codigo, datos[i].nombre,
+                                          datos[i].barrio, datos[i].capacidad,
+                                          datos[i].disponibles)),
+              "insertar estacion de prueba");
+    }
+
+    CHECK(tabla.getCantidad() == 10, "la tabla debe tener 10 estaciones");
+    CHECK(tabla.getColisiones() == 3, "la tabla debe registrar 3 colisiones");
+    CHECK(tabla.factorDeCarga() > 0.7692 && tabla.factorDeCarga() < 0.7693,
+          "el factor de carga debe ser 10/13");
+
+    Estacion* plz = tabla.obtener("PLZ");
+    CHECK(plz != nullptr && plz->getNombre() == "PlazaDeMayo",
+          "obtener PLZ debe devolver la estacion correcta");
+    CHECK(tabla.obtener("XXX") == nullptr, "obtener una clave inexistente da nullptr");
+
+    Estacion* duplicada = new Estacion("PLZ", "Duplicada", "X", 1, 0);
+    CHECK(!tabla.insertar("PLZ", duplicada), "no se debe insertar un codigo duplicado");
+    delete duplicada;
+    CHECK(tabla.getCantidad() == 10, "el duplicado no cambia la cantidad");
+
+    Estacion* buffer[10];
+    CHECK(tabla.volcarEstaciones(buffer, 10) == 10, "volcar debe devolver 10");
+    bool todas = true;
+    for (int i = 0; i < 10; ++i) {
+        if (buffer[i] == nullptr) {
+            todas = false;
+        }
+    }
+    CHECK(todas, "volcar no debe dejar punteros nulos");
+
+    CHECK(tabla.eliminar("PLZ"), "eliminar PLZ debe funcionar");
+    CHECK(tabla.getCantidad() == 9, "la cantidad baja a 9");
+    CHECK(tabla.obtener("PLZ") == nullptr, "PLZ ya no debe existir");
+    CHECK(!tabla.eliminar("PLZ"), "eliminar dos veces devuelve false");
+
+    tabla.vaciar();
+    CHECK(tabla.getCantidad() == 0, "vaciar deja la tabla sin estaciones");
+    CHECK(tabla.getColisiones() == 0, "vaciar resetea las colisiones");
+
+    CHECK(tabla.insertar("AAA", new Estacion("AAA", "A", "A", 1, 0)),
+          "insertar despues de vaciar");
+    CHECK(tabla.getCantidad() == 1 && tabla.getColisiones() == 0,
+          "la tabla queda utilizable despues de vaciar");
 }

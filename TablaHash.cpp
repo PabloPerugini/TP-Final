@@ -11,16 +11,23 @@ TablaHash::TablaHash() : cantidad(0), colisiones(0) {
 
 // Destructor: libera la memoria de cada Estacion y de cada Nodo (Dueño total)
 TablaHash::~TablaHash() {
+    vaciar();
+}
+
+// Libera todo el contenido y deja la tabla lista para reutilizarse.
+void TablaHash::vaciar() {
     for (int i = 0; i < TAMANIO; ++i) {
         Nodo* actual = tabla[i];
         while (actual != nullptr) {
             Nodo* aBorrar = actual;
             actual = actual->siguiente;
-            delete aBorrar->datos; // Libera la Estación contenida
-            delete aBorrar;        // Libera el Nodo de la lista
+            delete aBorrar->datos;
+            delete aBorrar;
         }
         tabla[i] = nullptr;
     }
+    cantidad = 0;
+    colisiones = 0;
 }
 
 // Función hash: suma ponderada por posición 1-indexed codificada a módulo 13
@@ -114,6 +121,23 @@ void TablaHash::listarTodas() const {
     }
 }
 
+int TablaHash::volcarEstaciones(Estacion** destino, int capacidad) const {
+    if (destino == nullptr || capacidad <= 0) {
+        return 0;
+    }
+
+    int escritos = 0;
+    for (int i = 0; i < TAMANIO && escritos < capacidad; ++i) {
+        Nodo* actual = tabla[i];
+        while (actual != nullptr && escritos < capacidad) {
+            destino[escritos] = actual->datos;
+            ++escritos;
+            actual = actual->siguiente;
+        }
+    }
+    return escritos;
+}
+
 int TablaHash::getCantidad() const {
     return cantidad;
 }
@@ -124,4 +148,8 @@ int TablaHash::getColisiones() const {
 
 double TablaHash::factorDeCarga() const {
     return static_cast<double>(cantidad) / TAMANIO;
+}
+
+int TablaHash::getCapacidad() const {
+    return TAMANIO;
 }

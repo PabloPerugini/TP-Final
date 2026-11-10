@@ -16,9 +16,12 @@ public:
     Estacion* obtener(const std::string& codigo) const;
     bool eliminar(const std::string& codigo);
     void listarTodas() const;
+    int volcarEstaciones(Estacion** destino, int capacidad) const;
+    void vaciar();
     int getCantidad() const;
     int getColisiones() const;
     double factorDeCarga() const;
+    int getCapacidad() const;
 
 private:
     static const int TAMANIO = 13;

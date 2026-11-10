@@ -5,6 +5,7 @@ int fallos = 0;
 int main() {
     probarColaEspera();
     probarEstacion();
+    probarTablaHash();
 
     if (fallos == 0) {
         std::cout << "OK: todas las pruebas pasaron.\n";
