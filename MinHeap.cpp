@@ -95,7 +95,3 @@ bool MinHeap::estaVacio() const {
 int MinHeap::tamanio() const {
     return cantidad;
 }
-
-void MinHeap::vaciar() {
-    cantidad = 0;
-}

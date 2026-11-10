@@ -47,6 +47,7 @@ classDiagram
         +obtener(codigo) Estacion*
         +eliminar(codigo) bool
         +volcarEstaciones(destino, capacidad) int
+        +listarTodas() void
         +vaciar() void
         +getColisiones() int
         +factorDeCarga() double
@@ -144,9 +145,9 @@ classDiagram
         -int capacidad
         +insertar(biciId, prioridad) void
         +extraerMin(salida) bool
+        +contiene(biciId) bool
         +estaVacio() bool
         +tamanio() int
-        +vaciar() void
     }
 
     class Backtracking {

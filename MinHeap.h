@@ -16,7 +16,6 @@ public:
     bool contiene(int biciId) const;
     bool estaVacio() const;
     int tamanio() const;
-    void vaciar();
 
 private:
     EntradaTaller* datos;
