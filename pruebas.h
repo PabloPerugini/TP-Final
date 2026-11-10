@@ -32,5 +32,6 @@ void probarListaViajes();
 void probarMinHeap();
 void probarAbb();
 void probarGrafo();
+void probarBacktracking();
 
 #endif

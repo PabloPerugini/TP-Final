@@ -10,6 +10,7 @@ int main() {
     probarMinHeap();
     probarAbb();
     probarGrafo();
+    probarBacktracking();
 
     if (fallos == 0) {
         std::cout << "OK: todas las pruebas pasaron.\n";

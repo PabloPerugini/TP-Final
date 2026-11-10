@@ -6,6 +6,7 @@
 #include "MinHeap.h"
 #include "AbbBicicletas.h"
 #include "GrafoCiclovias.h"
+#include "Backtracking.h"
 
 void probarColaEspera() {
     ColaEspera cola;
@@ -355,4 +356,49 @@ void probarGrafo() {
 
     grafo.vaciar();
     CHECK(grafo.getCantidadVertices() == 0, "vaciar deja el grafo sin vertices");
+}
+
+void probarBacktracking() {
+    const std::string codigos[] = {"PLZ", "CAB", "RET", "CON", "BOE"};
+    const int faltantes[] = {3, 7, 5, 2, 5};
+
+    int soluciones = 0;
+    std::string salida = capturarSalida([&soluciones, &codigos, &faltantes]() {
+        soluciones = Backtracking::resolver(codigos, faltantes, 5, 10, true);
+    });
+
+    CHECK(soluciones == 4, "el ejemplo del PDF debe tener 4 soluciones");
+    CHECK(Backtracking::resolver(codigos, faltantes, 5, 10, false) == 4,
+          "contar sin imprimir debe dar el mismo resultado");
+
+    int impresas = 0;
+    std::size_t posicion = salida.find("Solucion");
+    while (posicion != std::string::npos) {
+        ++impresas;
+        posicion = salida.find("Solucion", posicion + 1);
+    }
+    CHECK(impresas == 4, "deben imprimirse las 4 soluciones");
+
+    CHECK(salida.find("PLZ, CAB") != std::string::npos,
+          "debe aparecer la solucion PLZ + CAB");
+    CHECK(salida.find("RET, BOE") != std::string::npos,
+          "debe aparecer la solucion RET + BOE");
+    CHECK(salida.find("PLZ, RET, CON") != std::string::npos,
+          "debe aparecer la solucion PLZ + RET + CON");
+    CHECK(salida.find("PLZ, CON, BOE") != std::string::npos,
+          "debe aparecer la solucion PLZ + CON + BOE");
+
+    CHECK(Backtracking::resolver(codigos, faltantes, 5, 1, false) == 0,
+          "una capacidad inalcanzable no tiene soluciones");
+
+    const std::string dosCodigos[] = {"A", "B"};
+    const int dosFaltantes[] = {3, 7};
+    CHECK(Backtracking::resolver(dosCodigos, dosFaltantes, 2, 7, false) == 1,
+          "con 3 y 7 solo el 7 suma exactamente 7");
+    CHECK(Backtracking::resolver(nullptr, dosFaltantes, 2, 7, false) == 0,
+          "un arreglo de codigos nulo devuelve 0");
+    CHECK(Backtracking::resolver(dosCodigos, dosFaltantes, 0, 7, false) == 0,
+          "una lista vacia devuelve 0");
+    CHECK(Backtracking::resolver(dosCodigos, dosFaltantes, 2, 0, false) == 0,
+          "una capacidad cero no tiene soluciones");
 }
