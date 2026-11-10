@@ -5,6 +5,7 @@
 #include "ListaViajes.h"
 #include "MinHeap.h"
 #include "AbbBicicletas.h"
+#include "GrafoCiclovias.h"
 
 void probarColaEspera() {
     ColaEspera cola;
@@ -298,4 +299,60 @@ void probarAbb() {
     abb.vaciar();
     CHECK(abb.altura() == 0 && abb.buscar(551) == nullptr,
           "vaciar deja el arbol vacio despues de los borrados");
+}
+
+void probarGrafo() {
+    GrafoCiclovias grafo;
+    const char* codigos[] = {"PLZ", "PAL", "CAB", "RET", "CON",
+                             "BOE", "BAL", "FLO", "BEL", "ISL"};
+    for (const char* codigo : codigos) {
+        grafo.agregarEstacion(codigo);
+    }
+
+    CHECK(grafo.getCantidadVertices() == 10, "el grafo debe tener 10 vertices");
+    grafo.agregarEstacion("PLZ");
+    CHECK(grafo.getCantidadVertices() == 10,
+          "agregar una estacion duplicada no cambia el grafo");
+
+    grafo.agregarCiclovia("PLZ", "CAB");
+    grafo.agregarCiclovia("CAB", "PAL");
+    grafo.agregarCiclovia("PAL", "RET");
+    grafo.agregarCiclovia("RET", "CON");
+    grafo.agregarCiclovia("CON", "BOE");
+    grafo.agregarCiclovia("PAL", "BOE");
+    grafo.agregarCiclovia("BAL", "PLZ");
+    grafo.agregarCiclovia("FLO", "BAL");
+
+    std::string camino;
+    int tramos = -1;
+    CHECK(grafo.buscarCaminoMasCorto("PLZ", "CON", camino, tramos) ==
+              ResultadoCamino::Encontrado,
+          "debe existir camino entre PLZ y CON");
+    CHECK(tramos == 4, "PLZ a CON debe tener 4 tramos");
+    CHECK(camino.find("PLZ") == 0, "el camino debe empezar en PLZ");
+    CHECK(camino.size() >= 3 &&
+              camino.substr(camino.size() - 3) == "CON",
+          "el camino debe terminar en CON");
+
+    CHECK(grafo.buscarCaminoMasCorto("PLZ", "PLZ", camino, tramos) ==
+              ResultadoCamino::Encontrado,
+          "el camino de una estacion a si misma existe");
+    CHECK(tramos == 0 && camino == "PLZ",
+          "el camino de PLZ a PLZ tiene 0 tramos");
+
+    CHECK(grafo.buscarCaminoMasCorto("BEL", "PLZ", camino, tramos) ==
+              ResultadoCamino::SinCamino,
+          "BEL esta aislada y no llega a PLZ");
+    CHECK(grafo.buscarCaminoMasCorto("PLZ", "XXX", camino, tramos) ==
+              ResultadoCamino::EstacionInexistente,
+          "una estacion inexistente debe informarse");
+
+    grafo.eliminarEstacion("CAB");
+    CHECK(grafo.getCantidadVertices() == 9, "eliminar CAB deja 9 vertices");
+    CHECK(grafo.buscarCaminoMasCorto("PLZ", "PAL", camino, tramos) ==
+              ResultadoCamino::SinCamino,
+          "sin CAB ya no hay camino entre PLZ y PAL");
+
+    grafo.vaciar();
+    CHECK(grafo.getCantidadVertices() == 0, "vaciar deja el grafo sin vertices");
 }

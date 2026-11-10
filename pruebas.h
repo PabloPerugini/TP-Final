@@ -31,5 +31,6 @@ void probarTablaHash();
 void probarListaViajes();
 void probarMinHeap();
 void probarAbb();
+void probarGrafo();
 
 #endif

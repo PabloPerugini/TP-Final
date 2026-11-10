@@ -9,6 +9,7 @@ int main() {
     probarListaViajes();
     probarMinHeap();
     probarAbb();
+    probarGrafo();
 
     if (fallos == 0) {
         std::cout << "OK: todas las pruebas pasaron.\n";
