@@ -3,14 +3,9 @@
 #include "Estacion.h"
 #include "Backtracking.h"
 #include <iostream>
-#include <limits>
+#include <sstream>
 
 namespace {
-void descartarRestoDeLinea() {
-    std::cin.clear();
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
-
 int resolverYMostrar(const std::string* codigos, const int* faltantes,
                      int cantidad, int capacidad) {
     std::cout << "Capacidad del camion: " << capacidad << "\n";
@@ -72,15 +67,21 @@ int Red::calcularRedistribucionManual(int capacidadCamion) const {
     }
 
     int cantidad = 0;
+    std::string linea;
     std::cout << "Cantidad de estaciones: ";
-    if (!(std::cin >> cantidad)) {
-        descartarRestoDeLinea();
+    if (!std::getline(std::cin, linea)) {
+        return 0;
+    }
+    std::istringstream issCantidad(linea);
+    int leido;
+    std::string sobrante;
+    if (!(issCantidad >> leido) || (issCantidad >> sobrante)) {
         std::cout << "Entrada invalida: la cantidad debe ser un numero "
                      "entero.\n";
         return 0;
     }
+    cantidad = leido;
     if (cantidad <= 0) {
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "La cantidad debe ser mayor que cero.\n";
         return 0;
     }
@@ -89,20 +90,29 @@ int Red::calcularRedistribucionManual(int capacidadCamion) const {
     int* faltantes = new int[cantidad];
     for (int i = 0; i < cantidad; ++i) {
         std::cout << "Estacion " << (i + 1) << " (codigo faltante): ";
-        if (!(std::cin >> codigos[i] >> faltantes[i])) {
-            descartarRestoDeLinea();
-            std::cout << "Entrada invalida: se esperaba un codigo y un "
-                         "numero entero de faltantes.\n";
+        if (!std::getline(std::cin, linea)) {
             delete[] codigos;
             delete[] faltantes;
             return 0;
         }
+        std::istringstream iss(linea);
+        std::string codigo;
+        int faltante = 0;
+        std::string sobrante;
+        if (!(iss >> codigo >> faltante) || (iss >> sobrante)) {
+            delete[] codigos;
+            delete[] faltantes;
+            std::cout << "Entrada invalida: se esperaba un codigo y un "
+                         "numero entero de faltantes.\n";
+            return 0;
+        }
+        codigos[i] = codigo;
+        faltantes[i] = faltante;
     }
 
     int soluciones = resolverYMostrar(codigos, faltantes, cantidad,
                                       capacidadCamion);
     delete[] codigos;
     delete[] faltantes;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return soluciones;
 }

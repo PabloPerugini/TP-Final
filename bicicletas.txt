@@ -10,3 +10,4 @@
 510 BEL Mecanica OK 3300
 511 CAB Mecanica OK 1100
 512 ISL Electrica OK 300
+513 MRN Electrica OK 1000
