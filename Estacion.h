@@ -4,26 +4,32 @@
 #include <string>
 #include "ColaEspera.h"
 
-enum class ResultadoDevolucion { AsignadaAEspera, AgregadaAEstacion, SinLugar };
+enum class ResultadoDevolucion
+{
+    AsignadaAEspera,
+    AgregadaAEstacion,
+    SinLugar
+};
 
-class Estacion {
+class Estacion
+{
 public:
-    Estacion(const std::string& codigo, const std::string& nombre,
-             const std::string& barrio, int capacidadAnclajes,
+    Estacion(const std::string &codigo, const std::string &nombre,
+             const std::string &barrio, int capacidadAnclajes,
              int biciDisponibles);
     ~Estacion();
 
-    const std::string& getCodigo() const;
-    const std::string& getNombre() const;
-    const std::string& getBarrio() const;
+    const std::string &getCodigo() const;
+    const std::string &getNombre() const;
+    const std::string &getBarrio() const;
     int getCapacidadAnclajes() const;
     int getBiciDisponibles() const;
 
     double porcentajeOcupacion() const;
 
     bool retirarBicicleta();
-    ResultadoDevolucion devolverBicicleta(std::string& dniAsignado);
-    void encolarUsuario(const std::string& dni);
+    ResultadoDevolucion devolverBicicleta(std::string &dniAsignado);
+    void encolarUsuario(const std::string &dni);
     int getUsuariosEnEspera() const;
 
 private:

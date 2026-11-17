@@ -2,21 +2,30 @@
 #define BICICLETA_H
 #include <string>
 
-enum class TipoBici { Mecanica, Electrica };
-enum class EstadoBici { OK, Averiada };
+enum class TipoBici
+{
+    Mecanica,
+    Electrica
+};
+enum class EstadoBici
+{
+    OK,
+    Averiada
+};
 
-class Bicicleta {
+class Bicicleta
+{
 public:
-    Bicicleta(int biciId, const std::string& codigoEstacion,
+    Bicicleta(int biciId, const std::string &codigoEstacion,
               TipoBici tipo, EstadoBici estado, int kilometros);
 
     int getBiciId() const;
-    const std::string& getCodigoEstacion() const;
+    const std::string &getCodigoEstacion() const;
     TipoBici getTipo() const;
     EstadoBici getEstado() const;
     int getKilometros() const;
 
-    void setCodigoEstacion(const std::string& codigo);
+    void setCodigoEstacion(const std::string &codigo);
 
 private:
     int biciId;

@@ -1,24 +1,26 @@
 #ifndef MIN_HEAP_H
 #define MIN_HEAP_H
 
-struct EntradaTaller {
+struct EntradaTaller
+{
     int biciId;
     int prioridad;
 };
 
-class MinHeap {
+class MinHeap
+{
 public:
     MinHeap();
     ~MinHeap();
 
     void insertar(int biciId, int prioridad);
-    bool extraerMin(EntradaTaller& salida);
+    bool extraerMin(EntradaTaller &salida);
     bool contiene(int biciId) const;
     bool estaVacio() const;
     int tamanio() const;
 
 private:
-    EntradaTaller* datos;
+    EntradaTaller *datos;
     int cantidad;
     int capacidad;
 
@@ -26,8 +28,8 @@ private:
     void subir(int indice);
     void bajar(int indice);
 
-    MinHeap(const MinHeap&) = delete;
-    MinHeap& operator=(const MinHeap&) = delete;
+    MinHeap(const MinHeap &) = delete;
+    MinHeap &operator=(const MinHeap &) = delete;
 };
 
 #endif

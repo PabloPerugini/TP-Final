@@ -2,14 +2,17 @@
 
 MinHeap::MinHeap() : datos(new EntradaTaller[4]), cantidad(0), capacidad(4) {}
 
-MinHeap::~MinHeap() {
+MinHeap::~MinHeap()
+{
     delete[] datos;
 }
 
-void MinHeap::redimensionar() {
+void MinHeap::redimensionar()
+{
     int nuevaCapacidad = capacidad * 2;
-    EntradaTaller* nuevos = new EntradaTaller[nuevaCapacidad];
-    for (int i = 0; i < cantidad; ++i) {
+    EntradaTaller *nuevos = new EntradaTaller[nuevaCapacidad];
+    for (int i = 0; i < cantidad; ++i)
+    {
         nuevos[i] = datos[i];
     }
     delete[] datos;
@@ -17,10 +20,13 @@ void MinHeap::redimensionar() {
     capacidad = nuevaCapacidad;
 }
 
-void MinHeap::subir(int indice) {
-    while (indice > 0) {
+void MinHeap::subir(int indice)
+{
+    while (indice > 0)
+    {
         int padre = (indice - 1) / 2;
-        if (datos[padre].prioridad <= datos[indice].prioridad) {
+        if (datos[padre].prioridad <= datos[indice].prioridad)
+        {
             break;
         }
         EntradaTaller temporal = datos[padre];
@@ -30,21 +36,26 @@ void MinHeap::subir(int indice) {
     }
 }
 
-void MinHeap::bajar(int indice) {
-    while (true) {
+void MinHeap::bajar(int indice)
+{
+    while (true)
+    {
         int hijoIzquierdo = 2 * indice + 1;
         int hijoDerecho = 2 * indice + 2;
         int menor = indice;
 
         if (hijoIzquierdo < cantidad &&
-            datos[hijoIzquierdo].prioridad < datos[menor].prioridad) {
+            datos[hijoIzquierdo].prioridad < datos[menor].prioridad)
+        {
             menor = hijoIzquierdo;
         }
         if (hijoDerecho < cantidad &&
-            datos[hijoDerecho].prioridad < datos[menor].prioridad) {
+            datos[hijoDerecho].prioridad < datos[menor].prioridad)
+        {
             menor = hijoDerecho;
         }
-        if (menor == indice) {
+        if (menor == indice)
+        {
             break;
         }
 
@@ -55,8 +66,10 @@ void MinHeap::bajar(int indice) {
     }
 }
 
-void MinHeap::insertar(int biciId, int prioridad) {
-    if (cantidad == capacidad) {
+void MinHeap::insertar(int biciId, int prioridad)
+{
+    if (cantidad == capacidad)
+    {
         redimensionar();
     }
     datos[cantidad].biciId = biciId;
@@ -65,33 +78,41 @@ void MinHeap::insertar(int biciId, int prioridad) {
     ++cantidad;
 }
 
-bool MinHeap::extraerMin(EntradaTaller& salida) {
-    if (cantidad == 0) {
+bool MinHeap::extraerMin(EntradaTaller &salida)
+{
+    if (cantidad == 0)
+    {
         return false;
     }
 
     salida = datos[0];
     --cantidad;
-    if (cantidad > 0) {
+    if (cantidad > 0)
+    {
         datos[0] = datos[cantidad];
         bajar(0);
     }
     return true;
 }
 
-bool MinHeap::contiene(int biciId) const {
-    for (int i = 0; i < cantidad; ++i) {
-        if (datos[i].biciId == biciId) {
+bool MinHeap::contiene(int biciId) const
+{
+    for (int i = 0; i < cantidad; ++i)
+    {
+        if (datos[i].biciId == biciId)
+        {
             return true;
         }
     }
     return false;
 }
 
-bool MinHeap::estaVacio() const {
+bool MinHeap::estaVacio() const
+{
     return cantidad == 0;
 }
 
-int MinHeap::tamanio() const {
+int MinHeap::tamanio() const
+{
     return cantidad;
 }

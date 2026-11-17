@@ -8,15 +8,18 @@
 #include <iostream>
 #include <iomanip>
 
-Red::Red() {
+Red::Red()
+{
     crearEstructuras();
 }
 
-Red::~Red() {
+Red::~Red()
+{
     liberarEstructuras();
 }
 
-void Red::crearEstructuras() {
+void Red::crearEstructuras()
+{
     estaciones = new TablaHash();
     ciclovias = new GrafoCiclovias();
     viajes = new ListaViajes();
@@ -24,7 +27,8 @@ void Red::crearEstructuras() {
     taller = new MinHeap();
 }
 
-void Red::liberarEstructuras() {
+void Red::liberarEstructuras()
+{
     delete taller;
     taller = nullptr;
     delete bicicletas;
@@ -37,14 +41,17 @@ void Red::liberarEstructuras() {
     estaciones = nullptr;
 }
 
-void Red::reiniciar() {
+void Red::reiniciar()
+{
     liberarEstructuras();
     crearEstructuras();
 }
 
-void Red::cargarEstaciones(const std::string& ruta) {
+void Red::cargarEstaciones(const std::string &ruta)
+{
     std::ifstream archivo(ruta);
-    if (!archivo.is_open()) {
+    if (!archivo.is_open())
+    {
         std::cout << "No se pudo abrir el archivo: " << ruta << "\n";
         return;
     }
@@ -56,13 +63,17 @@ void Red::cargarEstaciones(const std::string& ruta) {
     int disponibles = 0;
     int cargadas = 0;
 
-    while (archivo >> codigo >> nombre >> barrio >> capacidad >> disponibles) {
-        Estacion* estacion =
+    while (archivo >> codigo >> nombre >> barrio >> capacidad >> disponibles)
+    {
+        Estacion *estacion =
             new Estacion(codigo, nombre, barrio, capacidad, disponibles);
-        if (estaciones->insertar(codigo, estacion)) {
+        if (estaciones->insertar(codigo, estacion))
+        {
             ciclovias->agregarEstacion(codigo);
             ++cargadas;
-        } else {
+        }
+        else
+        {
             delete estacion;
             std::cout << "Estacion duplicada ignorada: " << codigo << "\n";
         }
@@ -70,9 +81,11 @@ void Red::cargarEstaciones(const std::string& ruta) {
     std::cout << "Estaciones cargadas: " << cargadas << "\n";
 }
 
-void Red::cargarBicicletas(const std::string& ruta) {
+void Red::cargarBicicletas(const std::string &ruta)
+{
     std::ifstream archivo(ruta);
-    if (!archivo.is_open()) {
+    if (!archivo.is_open())
+    {
         std::cout << "No se pudo abrir el archivo: " << ruta << "\n";
         return;
     }
@@ -85,16 +98,20 @@ void Red::cargarBicicletas(const std::string& ruta) {
     int cargadas = 0;
 
     while (archivo >> biciId >> codigoEstacion >> tipoTexto >> estadoTexto >>
-           kilometros) {
+           kilometros)
+    {
         TipoBici tipo = tipoTexto == "Electrica" ? TipoBici::Electrica
                                                  : TipoBici::Mecanica;
         EstadoBici estado = estadoTexto == "Averiada" ? EstadoBici::Averiada
                                                       : EstadoBici::OK;
-        Bicicleta* bicicleta =
+        Bicicleta *bicicleta =
             new Bicicleta(biciId, codigoEstacion, tipo, estado, kilometros);
-        if (bicicletas->insertar(bicicleta)) {
+        if (bicicletas->insertar(bicicleta))
+        {
             ++cargadas;
-        } else {
+        }
+        else
+        {
             delete bicicleta;
             std::cout << "Bicicleta duplicada ignorada: " << biciId << "\n";
         }
@@ -102,9 +119,11 @@ void Red::cargarBicicletas(const std::string& ruta) {
     std::cout << "Bicicletas cargadas: " << cargadas << "\n";
 }
 
-void Red::cargarViajes(const std::string& ruta) {
+void Red::cargarViajes(const std::string &ruta)
+{
     std::ifstream archivo(ruta);
-    if (!archivo.is_open()) {
+    if (!archivo.is_open())
+    {
         std::cout << "No se pudo abrir el archivo: " << ruta << "\n";
         return;
     }
@@ -119,7 +138,8 @@ void Red::cargarViajes(const std::string& ruta) {
     int cargados = 0;
 
     while (archivo >> viajeId >> biciId >> dni >> origen >> destino >> fecha >>
-           duracion) {
+           duracion)
+    {
         viajes->insertar(new Viaje(viajeId, biciId, dni, origen, destino,
                                    fecha, duracion));
         ++cargados;
@@ -127,9 +147,11 @@ void Red::cargarViajes(const std::string& ruta) {
     std::cout << "Viajes cargados: " << cargados << "\n";
 }
 
-void Red::cargarCiclovias(const std::string& ruta) {
+void Red::cargarCiclovias(const std::string &ruta)
+{
     std::ifstream archivo(ruta);
-    if (!archivo.is_open()) {
+    if (!archivo.is_open())
+    {
         std::cout << "No se pudo abrir el archivo: " << ruta << "\n";
         return;
     }
@@ -137,34 +159,41 @@ void Red::cargarCiclovias(const std::string& ruta) {
     std::string origen;
     std::string destino;
     int cargadas = 0;
-    while (archivo >> origen >> destino) {
+    while (archivo >> origen >> destino)
+    {
         ciclovias->agregarCiclovia(origen, destino);
         ++cargadas;
     }
     std::cout << "Ciclovias cargadas: " << cargadas << "\n";
 }
 
-int Red::getCantidadEstaciones() const {
+int Red::getCantidadEstaciones() const
+{
     return estaciones->getCantidad();
 }
 
-int Red::getCantidadBicicletas() const {
+int Red::getCantidadBicicletas() const
+{
     return bicicletas->getCantidad();
 }
 
-int Red::getCantidadViajes() const {
+int Red::getCantidadViajes() const
+{
     return viajes->getCantidad();
 }
 
-int Red::getColisionesHash() const {
+int Red::getColisionesHash() const
+{
     return estaciones->getColisiones();
 }
 
-double Red::getFactorCargaHash() const {
+double Red::getFactorCargaHash() const
+{
     return estaciones->factorDeCarga();
 }
 
-void Red::mostrarEstadisticasHash() const {
+void Red::mostrarEstadisticasHash() const
+{
     std::cout << "=== ESTADISTICAS DE LA TABLA HASH ===\n";
     std::cout << "Estaciones cargadas: " << getCantidadEstaciones() << "\n";
     std::cout << "Bicicletas registradas: " << getCantidadBicicletas() << "\n";

@@ -4,34 +4,41 @@
 #include <iostream>
 
 bool Red::insertarBicicletaManual(int biciId,
-                                  const std::string& codigoEstacion,
+                                  const std::string &codigoEstacion,
                                   TipoBici tipo, EstadoBici estado,
-                                  int kilometros) {
-    if (biciId <= 0 || kilometros < 0 || codigoEstacion.empty()) {
+                                  int kilometros)
+{
+    if (biciId <= 0 || kilometros < 0 || codigoEstacion.empty())
+    {
         std::cout << "Datos invalidos para la bicicleta.\n";
         return false;
     }
-    if (estaciones->obtener(codigoEstacion) == nullptr) {
+    if (estaciones->obtener(codigoEstacion) == nullptr)
+    {
         std::cout << "No existe la estacion " << codigoEstacion << ".\n";
         return false;
     }
-    if (bicicletas->buscar(biciId) != nullptr) {
+    if (bicicletas->buscar(biciId) != nullptr)
+    {
         std::cout << "Ya existe una bicicleta con el ID " << biciId << ".\n";
         return false;
     }
 
-    Bicicleta* nueva = new Bicicleta(biciId, codigoEstacion, tipo, estado,
+    Bicicleta *nueva = new Bicicleta(biciId, codigoEstacion, tipo, estado,
                                      kilometros);
-    if (!bicicletas->insertar(nueva)) {
+    if (!bicicletas->insertar(nueva))
+    {
         delete nueva;
         return false;
     }
     return true;
 }
 
-bool Red::buscarBicicletaPorId(int biciId) const {
-    Bicicleta* bicicleta = bicicletas->buscar(biciId);
-    if (bicicleta == nullptr) {
+bool Red::buscarBicicletaPorId(int biciId) const
+{
+    Bicicleta *bicicleta = bicicletas->buscar(biciId);
+    if (bicicleta == nullptr)
+    {
         std::cout << "No existe la bicicleta " << biciId << ".\n";
         return false;
     }
@@ -50,8 +57,10 @@ bool Red::buscarBicicletaPorId(int biciId) const {
     return true;
 }
 
-void Red::listarBicicletasInorder() const {
-    if (bicicletas->getCantidad() == 0) {
+void Red::listarBicicletasInorder() const
+{
+    if (bicicletas->getCantidad() == 0)
+    {
         std::cout << "No hay bicicletas cargadas.\n";
         return;
     }
@@ -59,14 +68,17 @@ void Red::listarBicicletasInorder() const {
     bicicletas->listarInorder();
 }
 
-int Red::contarBicicletasAveriadas() const {
+int Red::contarBicicletasAveriadas() const
+{
     return bicicletas->contarAveriadas();
 }
 
-int Red::obtenerAlturaABB() const {
+int Red::obtenerAlturaABB() const
+{
     return bicicletas->altura();
 }
 
-bool Red::eliminarBicicletaABB(int biciId) {
+bool Red::eliminarBicicletaABB(int biciId)
+{
     return bicicletas->eliminar(biciId);
 }

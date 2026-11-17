@@ -3,27 +3,33 @@
 
 ListaViajes::ListaViajes() : cabeza(nullptr), cantidad(0) {}
 
-ListaViajes::~ListaViajes() {
+ListaViajes::~ListaViajes()
+{
     vaciar();
 }
 
-void ListaViajes::insertar(Viaje* viaje) {
-    if (viaje == nullptr) {
+void ListaViajes::insertar(Viaje *viaje)
+{
+    if (viaje == nullptr)
+    {
         return;
     }
     cabeza = new NodoViaje(viaje, cabeza);
     ++cantidad;
 }
 
-int ListaViajes::contarPorRangoFechas(const std::string& estacionOrigen,
-                                      int fechaInicio, int fechaFin) const {
+int ListaViajes::contarPorRangoFechas(const std::string &estacionOrigen,
+                                      int fechaInicio, int fechaFin) const
+{
     int contador = 0;
-    NodoViaje* actual = cabeza;
-    while (actual != nullptr) {
-        const Viaje* viaje = actual->dato;
+    NodoViaje *actual = cabeza;
+    while (actual != nullptr)
+    {
+        const Viaje *viaje = actual->dato;
         if (viaje->getEstacionOrigen() == estacionOrigen &&
             viaje->getFecha() >= fechaInicio &&
-            viaje->getFecha() <= fechaFin) {
+            viaje->getFecha() <= fechaFin)
+        {
             ++contador;
         }
         actual = actual->siguiente;
@@ -31,15 +37,18 @@ int ListaViajes::contarPorRangoFechas(const std::string& estacionOrigen,
     return contador;
 }
 
-int ListaViajes::buscarPorDni(const std::string& dni) const {
+int ListaViajes::buscarPorDni(const std::string &dni) const
+{
     int totalMinutos = 0;
     int encontrados = 0;
-    NodoViaje* actual = cabeza;
+    NodoViaje *actual = cabeza;
 
     std::cout << "\n=== VIAJES DEL USUARIO DNI: " << dni << " ===\n";
-    while (actual != nullptr) {
-        const Viaje* viaje = actual->dato;
-        if (viaje->getDniUsuario() == dni) {
+    while (actual != nullptr)
+    {
+        const Viaje *viaje = actual->dato;
+        if (viaje->getDniUsuario() == dni)
+        {
             std::cout << "- Viaje #" << viaje->getViajeId()
                       << " | Bici #" << viaje->getBiciId()
                       << " | Origen: " << viaje->getEstacionOrigen()
@@ -57,14 +66,17 @@ int ListaViajes::buscarPorDni(const std::string& dni) const {
     return totalMinutos;
 }
 
-int ListaViajes::getCantidad() const {
+int ListaViajes::getCantidad() const
+{
     return cantidad;
 }
 
-void ListaViajes::vaciar() {
-    NodoViaje* actual = cabeza;
-    while (actual != nullptr) {
-        NodoViaje* aBorrar = actual;
+void ListaViajes::vaciar()
+{
+    NodoViaje *actual = cabeza;
+    while (actual != nullptr)
+    {
+        NodoViaje *aBorrar = actual;
         actual = actual->siguiente;
         delete aBorrar->dato;
         delete aBorrar;

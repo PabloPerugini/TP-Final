@@ -2,30 +2,38 @@
 
 ColaEspera::ColaEspera() : frente(nullptr), fin(nullptr), cantidad(0) {}
 
-ColaEspera::~ColaEspera() {
+ColaEspera::~ColaEspera()
+{
     vaciar();
 }
 
-void ColaEspera::encolar(const std::string& dni) {
-    Nodo* nuevo = new Nodo(dni);
-    if (fin == nullptr) {
+void ColaEspera::encolar(const std::string &dni)
+{
+    Nodo *nuevo = new Nodo(dni);
+    if (fin == nullptr)
+    {
         frente = nuevo;
-    } else {
+    }
+    else
+    {
         fin->siguiente = nuevo;
     }
     fin = nuevo;
     ++cantidad;
 }
 
-bool ColaEspera::desencolar(std::string& dni) {
-    if (frente == nullptr) {
+bool ColaEspera::desencolar(std::string &dni)
+{
+    if (frente == nullptr)
+    {
         return false;
     }
 
-    Nodo* aBorrar = frente;
+    Nodo *aBorrar = frente;
     dni = frente->dni;
     frente = frente->siguiente;
-    if (frente == nullptr) {
+    if (frente == nullptr)
+    {
         fin = nullptr;
     }
 
@@ -34,18 +42,22 @@ bool ColaEspera::desencolar(std::string& dni) {
     return true;
 }
 
-bool ColaEspera::estaVacia() const {
+bool ColaEspera::estaVacia() const
+{
     return frente == nullptr;
 }
 
-int ColaEspera::tamanio() const {
+int ColaEspera::tamanio() const
+{
     return cantidad;
 }
 
-void ColaEspera::vaciar() {
-    Nodo* actual = frente;
-    while (actual != nullptr) {
-        Nodo* aBorrar = actual;
+void ColaEspera::vaciar()
+{
+    Nodo *actual = frente;
+    while (actual != nullptr)
+    {
+        Nodo *aBorrar = actual;
         actual = actual->siguiente;
         delete aBorrar;
     }
